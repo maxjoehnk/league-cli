@@ -1,0 +1,35 @@
+{
+    "name": "league-cli",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.js",
+    "bin": {
+        "league": "bin/league"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/maxjoehnk/league-cli.git"
+    },
+    "keywords": [
+        "league-of-legends",
+        "lol",
+        "cli",
+        "champion.gg"
+    ],
+    "author": "Max Jöhnk <maxjoehnk@gmail.com>",
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/maxjoehnk/league-cli/issues"
+    },
+    "homepage": "https://github.com/maxjoehnk/league-cli#readme",
+    "dependencies": {
+        "chalk": "^2.1.0",
+        "cli-table": "^0.3.1",
+        "js-yaml": "^3.9.1",
+        "node-fetch": "^1.7.2",
+        "yargs": "^8.0.2"
+    }
+}

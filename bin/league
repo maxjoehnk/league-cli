@@ -1,0 +1,66 @@
+#!/usr/bin/env node
+const yargs = require('yargs');
+const chalk = require('chalk');
+const { join } = require('path');
+const { load } = require('../src/config');
+const package = require('../package.json');
+const riot = require('../src/riot.js');
+const championgg = require('../src/championgg.js');
+
+yargs
+    .string('champion')
+    .string('riot-key')
+    .string('gg-key')
+    .boolean('skills')
+    .help()
+    .version(package.version);
+
+const { argv } = yargs;
+
+const createRow = skill => row => {
+    return row.hash.split('-')
+        .map((s, i) => {
+            if (i === 0) {
+                return chalk.red(skill);
+            }else if (s === skill) {
+                return `${i}`;
+            }
+            return '';
+        });
+};
+
+const createQ = createRow('Q');
+const createW = createRow('W');
+const createE = createRow('E');
+const createR = createRow('R');
+
+const createTable = (header, row) => {
+    const levels = [...Array(18).keys()].map(i => `${i + 1}`);
+
+    const table = new Table({
+        head: [chalk.white(header), ...levels]
+    });
+
+    table.push(
+        createQ(row),
+        createW(row),
+        createE(row),
+        createR(row)
+    );
+
+    return table;
+};
+
+const stats = async () => {
+    const config = await load(join(__dirname, '../config.yml'));
+    const champions = await riot.champions(config.keys.riot);
+    const id = riot.championId(champions, argv.champion);
+    const stats = await championgg.champion(config.keys['champion.gg'], id);
+    const mostFrequent = createTable('Most Frequent', stats.skillorderhash.highestCount);
+    const highestWin = createTable('Highest Win %', stats.skillorderhash.highestWinrate);
+    console.log(chalk.white.bold(argv.champion));
+    console.log(mostFrequent);
+    console.log(highestWin);
+};
+
+stats().catch(err => console.error(err));
