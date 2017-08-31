@@ -63,3 +63,6 @@ config.yml
 # Intellij Project files
 .idea
 *.iml
+
+# SQLite Databases
+*.sqlite
