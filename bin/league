@@ -9,13 +9,36 @@ const riot = require('../src/riot.js');
 const championgg = require('../src/championgg.js');
 const { connect, migrate } = require('../src/db');
 
+const stats = async (args) => {
+    const db = await connect();
+    await migrate(db);
+    const config = await load(join(__dirname, '../config.yml'));
+    const champions = await riot.champions(db, config.keys.riot);
+    const { id } = champions.find(({ name }) => name === args.champion);
+    const stats = await championgg.champion(config.keys['champion.gg'], id);
+    const mostFrequent = createTable('Most Frequent', stats.hashes.skillorderhash.highestCount);
+    const highestWin = createTable('Highest Win %', stats.hashes.skillorderhash.highestWinrate);
+    console.log(chalk.white.bold(`Build for ${args.champion}`));
+    console.log(mostFrequent.toString());
+    console.log(highestWin.toString());
+};
+
 yargs
-    .string('champion')
-    .string('riot-key')
-    .string('gg-key')
-    .boolean('skills')
+    .command('build <champion>', 'See Builds for a specified Champion', {
+            champion: {}
+        },
+        async(args) => {
+            try {
+                await stats(args);
+            }catch (err) {
+                console.error(err);
+            }
+            process.exit(0);
+        }
+    )
     .help()
-    .version(package.version);
+    .version(package.version)
+    .demandCommand();
 
 const { argv } = yargs;
 
@@ -52,21 +75,3 @@ const createTable = (header, row) => {
 
     return table;
 };
-
-const stats = async () => {
-    const db = await connect();
-    await migrate(db);
-    const config = await load(join(__dirname, '../config.yml'));
-    const champions = await riot.champions(db, config.keys.riot);
-    const { id } = champions.find(({ name }) => name === argv.champion);
-    const stats = await championgg.champion(config.keys['champion.gg'], id);
-    const mostFrequent = createTable('Most Frequent', stats.hashes.skillorderhash.highestCount);
-    const highestWin = createTable('Highest Win %', stats.hashes.skillorderhash.highestWinrate);
-    console.log(chalk.white.bold(argv.champion));
-    console.log(mostFrequent.toString());
-    console.log(highestWin.toString());
-};
-
-stats()
-    .catch(err => console.error(err))
-    .then(() => process.exit(0));

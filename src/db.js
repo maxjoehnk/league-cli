@@ -8,7 +8,8 @@ const connect = () => {
         client: 'sqlite3',
         connection: {
             filename: './cache.sqlite'
-        }
+        },
+        useNullAsDefault: true
     });
 };
 
