@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
 const chalk = require('chalk');
+const Table = require('cli-table');
 const { join } = require('path');
 const { load } = require('../src/config');
 const package = require('../package.json');
@@ -56,11 +57,11 @@ const stats = async () => {
     const champions = await riot.champions(config.keys.riot);
     const id = riot.championId(champions, argv.champion);
     const stats = await championgg.champion(config.keys['champion.gg'], id);
-    const mostFrequent = createTable('Most Frequent', stats.skillorderhash.highestCount);
-    const highestWin = createTable('Highest Win %', stats.skillorderhash.highestWinrate);
+    const mostFrequent = createTable('Most Frequent', stats.hashes.skillorderhash.highestCount);
+    const highestWin = createTable('Highest Win %', stats.hashes.skillorderhash.highestWinrate);
     console.log(chalk.white.bold(argv.champion));
-    console.log(mostFrequent);
-    console.log(highestWin);
+    console.log(mostFrequent.toString());
+    console.log(highestWin.toString());
 };
 
 stats().catch(err => console.error(err));

@@ -1,7 +1,9 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
+const d = require('debug')('league:config');
 
 const read = path => new Promise((resolve, reject) => fs.readFile(path, 'utf8', (err, content) => {
+    d(`Reading File ${path}`);
     if (err) {
         return reject(err);
     }
@@ -10,6 +12,7 @@ const read = path => new Promise((resolve, reject) => fs.readFile(path, 'utf8', 
 
 const load = async path => {
     const content = await read(path);
+    d(`Parsing File ${path}`);
     return yaml.safeLoad(content);
 };
 
