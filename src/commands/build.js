@@ -1,9 +1,7 @@
 const chalk = require('chalk');
 const Table = require('cli-table');
 const { load } = require('../config');
-const riot = require('../riot');
-const championgg = require('../championgg.js');
-const { connect, migrate } = require('../db');
+const { riot, championgg, db } = require('league-api');
 
 const createSkillRow = skill => row => {
     return row.hash.split('-')
@@ -58,11 +56,11 @@ const createItemTable = (hashes, items) => {
 };
 
 const stats = async (args) => {
-    const db = await connect();
-    await migrate(db);
+    const cache = await db.connect();
+    await db.migrate(cache);
     const config = await load(args.config);
-    const champions = await riot.champions(db, config.keys.riot);
-    const items = await riot.items(db, config.keys.riot);
+    const champions = await riot.champions(cache, config.keys.riot);
+    const items = await riot.items(cache, config.keys.riot);
     const { id } = champions.find(({ name }) => name === args.champion);
     const stats = await championgg.champion(config.keys['champion.gg'], id);
     const itemTable = createItemTable(stats.hashes.finalitemshashfixed, items);

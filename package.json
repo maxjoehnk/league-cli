@@ -1,15 +1,15 @@
 {
     "name": "league-cli",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "",
     "main": "src/index.js",
     "bin": {
         "league": "bin/league"
     },
     "scripts": {
-        "test": "mocha",
-        "generate-config": "node .ci/generate-config.js",
-        "package": "pkg --target host --output league ."
+        "test": "mocha --recursive",
+        "package": "pkg --target host --output league .",
+        "lint": "eslint src/** test/**"
     },
     "repository": {
         "type": "git",
@@ -33,17 +33,19 @@
         "cli-table": "^0.3.1",
         "debug": "^3.0.1",
         "js-yaml": "^3.9.1",
-        "knex": "^0.13.0",
+        "league-api": "github:maxjoehnk/league-api",
         "node-fetch": "^1.7.2",
-        "sqlite3": "^3.1.9",
         "wcwidth": "^1.0.1",
         "yargs": "^8.0.2"
     },
     "devDependencies": {
-        "pkg": "^4.2.4"
-    },
-    "pkg": {
-        "scripts": "migrations/**/*",
-        "assets": "config.yml"
+        "chai": "^4.1.2",
+        "chai-as-promised": "^7.1.1",
+        "eslint": "^4.5.0",
+        "mocha": "^3.5.0",
+        "mockery": "^2.1.0",
+        "pkg": "^4.2.4",
+        "sinon": "^3.2.1",
+        "sinon-chai": "^2.13.0"
     }
 }

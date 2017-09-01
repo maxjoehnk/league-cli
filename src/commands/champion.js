@@ -1,7 +1,6 @@
 const chalk = require('chalk');
 const { load } = require('../config');
-const riot = require('../riot');
-const { connect, migrate } = require('../db');
+const { riot, db } = require('league-api');
 const { render } = require('../image');
 const width = require('wcwidth');
 const d = require('debug')('league:commands:champion');
@@ -36,14 +35,14 @@ const print = (left, right) => {
 };
 
 const info = async (args) => {
-    const db = await connect();
-    await migrate(db);
+    const cache = await db.connect();
+    await db.migrate(cache);
     const config = await load(args.config);
-    const champions = await riot.champions(db, config.keys.riot);
+    const champions = await riot.champions(cache, config.keys.riot);
     const champion = champions.find(champ => champ.name === args.champion);
     if (champion) {
         d('Champion found', { name: champion.name, title: champion.title, id: champion.id });
-        const image = await render(champion.image_url);
+        const image = await render(champion.imageUrl);
         const mapSpell = spell => spells => {
             const assoc = {
                 Q: 0,
