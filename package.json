@@ -7,7 +7,9 @@
         "league": "bin/league"
     },
     "scripts": {
-        "test": "mocha"
+        "test": "mocha",
+        "generate-config": "node .ci/generate-config.js",
+        "package": "pkg --target host --output league ."
     },
     "repository": {
         "type": "git",
@@ -36,5 +38,12 @@
         "sqlite3": "^3.1.9",
         "wcwidth": "^1.0.1",
         "yargs": "^8.0.2"
+    },
+    "devDependencies": {
+        "pkg": "^4.2.4"
+    },
+    "pkg": {
+        "scripts": "migrations/**/*",
+        "assets": "config.yml"
     }
 }
