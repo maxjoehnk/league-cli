@@ -43,7 +43,7 @@ const createTable = (header, row) => {
 const stats = async (args) => {
     const db = await connect();
     await migrate(db);
-    const config = await load(join(__dirname, '../../config.yml'));
+    const config = await load(args.config);
     const champions = await riot.champions(db, config.keys.riot);
     const { id } = champions.find(({ name }) => name === args.champion);
     const stats = await championgg.champion(config.keys['champion.gg'], id);

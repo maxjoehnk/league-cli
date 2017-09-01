@@ -2,8 +2,12 @@
 const yargs = require('yargs');
 const package = require('../package.json');
 const build = require('../src/commands/build');
+const { join } = require('path');
 
 yargs
+    .string('config')
+    .default('config', join(__dirname, '../config.yml'))
+    .describe('config', 'A path to the config file')
     .command(build)
     .help()
     .version(package.version)
