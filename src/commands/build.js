@@ -1,12 +1,11 @@
 const chalk = require('chalk');
 const Table = require('cli-table');
-const { join } = require('path');
 const { load } = require('../config');
-const riot = require('../riot.js');
+const riot = require('../riot');
 const championgg = require('../championgg.js');
 const { connect, migrate } = require('../db');
 
-const createRow = skill => row => {
+const createSkillRow = skill => row => {
     return row.hash.split('-')
         .map((s, i) => {
             if (i === 0) {
@@ -18,12 +17,12 @@ const createRow = skill => row => {
         });
 };
 
-const createQ = createRow('Q');
-const createW = createRow('W');
-const createE = createRow('E');
-const createR = createRow('R');
+const createQ = createSkillRow('Q');
+const createW = createSkillRow('W');
+const createE = createSkillRow('E');
+const createR = createSkillRow('R');
 
-const createTable = (header, row) => {
+const createSkillTable = (header, row) => {
     const levels = [...Array(18).keys()].map(i => `${i + 1}`);
 
     const table = new Table({
@@ -40,16 +39,37 @@ const createTable = (header, row) => {
     return table;
 };
 
+const createItemRow = (row, items) => {
+    return row.hash.split('-')
+        .filter((_, i) => i > 0)
+        .map(id => parseInt(id))
+        .map(id => items.find(item => item.id === id))
+        .map(item => item.name);
+};
+
+const createItemTable = (hashes, items) => {
+    const slots = [...Array(6).keys()].map(i => `${i + 1}`);
+    const table = new Table({
+        head: [chalk.white('Items'), ...slots]
+    });
+    table.push([chalk.red('Most Frequent'), ...createItemRow(hashes.highestCount, items)]);
+    table.push([chalk.red('Highest Win %'), ...createItemRow(hashes.highestWinrate, items)]);
+    return table;
+};
+
 const stats = async (args) => {
     const db = await connect();
     await migrate(db);
     const config = await load(args.config);
     const champions = await riot.champions(db, config.keys.riot);
+    const items = await riot.items(db, config.keys.riot);
     const { id } = champions.find(({ name }) => name === args.champion);
     const stats = await championgg.champion(config.keys['champion.gg'], id);
-    const mostFrequent = createTable('Most Frequent', stats.hashes.skillorderhash.highestCount);
-    const highestWin = createTable('Highest Win %', stats.hashes.skillorderhash.highestWinrate);
+    const itemTable = createItemTable(stats.hashes.finalitemshashfixed, items);
+    const mostFrequent = createSkillTable('Most Frequent', stats.hashes.skillorderhash.highestCount);
+    const highestWin = createSkillTable('Highest Win %', stats.hashes.skillorderhash.highestWinrate);
     console.log(chalk.white.bold(`Build for ${args.champion}`));
+    console.log(itemTable.toString());
     console.log(mostFrequent.toString());
     console.log(highestWin.toString());
 };

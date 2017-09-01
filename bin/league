@@ -2,6 +2,7 @@
 const yargs = require('yargs');
 const package = require('../package.json');
 const build = require('../src/commands/build');
+const champion = require('../src/commands/champion');
 const { join } = require('path');
 
 yargs
@@ -9,6 +10,7 @@ yargs
     .default('config', join(__dirname, '../config.yml'))
     .describe('config', 'A path to the config file')
     .command(build)
+    .command(champion)
     .help()
     .version(package.version)
     .demandCommand()
