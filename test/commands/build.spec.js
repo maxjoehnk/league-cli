@@ -1,9 +1,6 @@
 const { expect, use } = require('chai');
-const { stub } = require('sinon');
-const { enable, disable, registerMock, registerAllowable } = require('mockery');
 const asPromised = require('chai-as-promised');
 const sinonChai = require('sinon-chai');
-const { resolve } = require('path');
 
 use(asPromised);
 use(sinonChai);
@@ -23,9 +20,5 @@ describe('commands/build', function() {
             champion: {}
         });
         expect(build.handler).to.be.an.instanceof(Function);
-    });
-
-    describe('handler', function() {
-
     });
 });

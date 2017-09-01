@@ -17,7 +17,7 @@ const print = (left, right) => {
     const rightAvailable = columns - imageWidth - paddingWidth;
     d(`available rows: ${rightAvailable}`);
     left.forEach((l, i) => {
-        let r = right[i];
+        const r = right[i];
         if (r === null || r === undefined) {
             return rows.push(l);
         }
@@ -31,10 +31,10 @@ const print = (left, right) => {
             rows.push(l + padding + tr);
         }
     });
-    rows.forEach(row => process.stdout.write(row + '\n'));
+    rows.forEach(row => process.stdout.write(`${row}\n`));
 };
 
-const info = async (args) => {
+const info = async args => {
     const cache = await db.connect();
     await db.migrate(cache);
     const config = await load(args.config);
@@ -52,7 +52,7 @@ const info = async (args) => {
             };
             const skill = spells[assoc[spell]];
             return [
-                chalk.bold.red(spell) + ' ' + chalk.red(skill.name),
+                chalk`{bold.red ${spell}} {red ${skill.name}}`,
                 skill.description
             ];
         };

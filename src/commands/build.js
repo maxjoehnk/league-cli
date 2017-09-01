@@ -3,17 +3,15 @@ const Table = require('cli-table');
 const { load } = require('../config');
 const { riot, championgg, db } = require('league-api');
 
-const createSkillRow = skill => row => {
-    return row.hash.split('-')
-        .map((s, i) => {
-            if (i === 0) {
-                return chalk.red(skill);
-            }else if (s === skill) {
-                return s;
-            }
-            return '';
-        });
-};
+const createSkillRow = skill => row => row.hash.split('-')
+    .map((s, i) => {
+        if (i === 0) {
+            return chalk.red(skill);
+        }else if (s === skill) {
+            return s;
+        }
+        return '';
+    });
 
 const createQ = createSkillRow('Q');
 const createW = createSkillRow('W');
@@ -37,13 +35,11 @@ const createSkillTable = (header, row) => {
     return table;
 };
 
-const createItemRow = (row, items) => {
-    return row.hash.split('-')
-        .filter((_, i) => i > 0)
-        .map(id => parseInt(id))
-        .map(id => items.find(item => item.id === id))
-        .map(item => item.name);
-};
+const createItemRow = (row, items) => row.hash.split('-')
+    .filter((_, i) => i > 0)
+    .map(id => parseInt(id, 10))
+    .map(id => items.find(item => item.id === id))
+    .map(item => item.name);
 
 const createItemTable = (hashes, items) => {
     const slots = [...Array(6).keys()].map(i => `${i + 1}`);
@@ -55,7 +51,7 @@ const createItemTable = (hashes, items) => {
     return table;
 };
 
-const stats = async (args) => {
+const stats = async args => {
     const cache = await db.connect();
     await db.migrate(cache);
     const config = await load(args.config);

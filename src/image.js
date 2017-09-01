@@ -1,11 +1,11 @@
 const fetch = require('node-fetch');
-const { PNG } = require('pngjs');
+const { PNG } = require('pngjs');
 const ansir = require('ansir');
 const d = require('debug')('league:image');
 
 const renderStream = stream => new Promise((resolve, reject) => {
     const png = new PNG({ filterType: 4 });
-    png.on('parsed', image => {
+    png.on('parsed', () => {
         d('Parsed Image');
         const rescaled = ansir.png.createRescaledImage(png, {
             scale: 0.25
