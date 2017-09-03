@@ -55,9 +55,8 @@ const stats = async args => {
     const cache = await db.connect();
     await db.migrate(cache);
     const config = await load(args.config);
-    const champions = await riot.champions(cache, config.keys.riot);
-    const items = await riot.items(cache, config.keys.riot);
-    const { id } = champions.find(({ name }) => name === args.champion);
+    const { id } = await riot.champions.find(cache, config.keys.riot, args.champion);
+    const items = await riot.items.all(cache, config.keys.riot);
     const stats = await championgg.champion(config.keys['champion.gg'], id);
     const itemTable = createItemTable(stats.hashes.finalitemshashfixed, items);
     const mostFrequent = createSkillTable('Most Frequent', stats.hashes.skillorderhash.highestCount);

@@ -38,8 +38,7 @@ const info = async args => {
     const cache = await db.connect();
     await db.migrate(cache);
     const config = await load(args.config);
-    const champions = await riot.champions(cache, config.keys.riot);
-    const champion = champions.find(champ => champ.name === args.champion);
+    const champion = await riot.champions.find(cache, config.keys.riot, args.champion);
     if (champion) {
         d('Champion found', { name: champion.name, title: champion.title, id: champion.id });
         const image = await render(champion.imageUrl);
