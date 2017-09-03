@@ -1,6 +1,6 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
-const d = require('debug')('league:config');
+const d = require('debug')('league-cli:config');
 
 const read = path => new Promise((resolve, reject) => fs.readFile(path, 'utf8', (err, content) => {
     d(`Reading File ${path}`);
