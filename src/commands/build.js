@@ -57,7 +57,12 @@ const stats = async args => {
     const config = await load(args.config);
     const { id } = await riot.champions.find(cache, config.keys.riot, args.champion);
     const items = await riot.items.all(cache, config.keys.riot);
-    const stats = await championgg.champion(config.keys['champion.gg'], id);
+    let stats;
+    if (args.role) {
+        stats = await championgg.byRole(config.keys['champion.gg'], id, args.role);
+    }else {
+        stats = await championgg.mostPlayed(config.keys['champion.gg'], id);
+    }
     const itemTable = createItemTable(stats.hashes.finalitemshashfixed, items);
     const mostFrequent = createSkillTable('Most Frequent', stats.hashes.skillorderhash.highestCount);
     const highestWin = createSkillTable('Highest Win %', stats.hashes.skillorderhash.highestWinrate);
@@ -68,10 +73,11 @@ const stats = async args => {
 };
 
 module.exports = {
-    command: 'build <champion>',
+    command: 'build <champion> [role]',
     describe: 'See Builds for a specified Champion',
     builder: {
-        champion: {}
+        champion: {},
+        role: {}
     },
     handler: async args => {
         try {
