@@ -1,51 +1,55 @@
 {
-    "name": "league-cli",
-    "version": "0.1.0",
-    "description": "",
-    "main": "src/index.js",
-    "bin": {
-        "league": "bin/league"
-    },
-    "scripts": {
-        "test": "mocha --recursive",
-        "package": "pkg --target host --output league .",
-        "lint": "eslint src/** test/**"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/maxjoehnk/league-cli.git"
-    },
-    "keywords": [
-        "league-of-legends",
-        "lol",
-        "cli",
-        "champion.gg"
-    ],
-    "author": "Max Jöhnk <maxjoehnk@gmail.com>",
-    "license": "GPL-3.0",
-    "bugs": {
-        "url": "https://github.com/maxjoehnk/league-cli/issues"
-    },
-    "homepage": "https://github.com/maxjoehnk/league-cli#readme",
-    "dependencies": {
-        "ansir": "github:maxjoehnk/ansir",
-        "chalk": "^2.1.0",
-        "cli-table": "^0.3.1",
-        "debug": "^3.0.1",
-        "js-yaml": "^3.9.1",
-        "league-api": "github:maxjoehnk/league-api",
-        "node-fetch": "^1.7.2",
-        "wcwidth": "^1.0.1",
-        "yargs": "^8.0.2"
-    },
-    "devDependencies": {
-        "chai": "^4.1.2",
-        "chai-as-promised": "^7.1.1",
-        "eslint": "^4.6.0",
-        "mocha": "^3.5.0",
-        "mockery": "^2.1.0",
-        "pkg": "^4.2.4",
-        "sinon": "^3.2.1",
-        "sinon-chai": "^2.13.0"
-    }
+  "name": "league-cli",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/index.js",
+  "bin": {
+    "league": "bin/league"
+  },
+  "scripts": {
+    "test": "mocha --recursive",
+    "package": "pkg --target host --output league .",
+    "lint": "eslint src/** test/**",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxjoehnk/league-cli.git"
+  },
+  "keywords": [
+    "league-of-legends",
+    "lol",
+    "cli",
+    "champion.gg"
+  ],
+  "author": "Max Jöhnk <maxjoehnk@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/maxjoehnk/league-cli/issues"
+  },
+  "homepage": "https://github.com/maxjoehnk/league-cli#readme",
+  "dependencies": {
+    "ansir": "github:maxjoehnk/ansir",
+    "chalk": "^2.1.0",
+    "cli-table": "^0.3.1",
+    "debug": "^3.1.0",
+    "js-yaml": "^3.9.1",
+    "league-api": "github:maxjoehnk/league-api",
+    "node-fetch": "^1.7.2",
+    "wcwidth": "^1.0.1",
+    "yargs": "^8.0.2",
+    "snyk": "^1.117.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^4.6.0",
+    "mocha": "^3.5.0",
+    "mockery": "^2.1.0",
+    "pkg": "^4.2.4",
+    "sinon": "^3.2.1",
+    "sinon-chai": "^2.13.0"
+  },
+  "snyk": true
 }
